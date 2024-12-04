@@ -82,5 +82,29 @@ public class GuestController {
         }
         return events;
     }
+    
+    public Event viewEventDetails(String eventId) {
+    	String query = "SELECT FROM event WHERE event_id = ?";
+    	
+    	Event event = null;
 
+	    try (PreparedStatement stmt = connection.prepareStatement(query)) {
+	        stmt.setString(1, eventId);
+
+	        try (ResultSet rs = stmt.executeQuery()) {
+	            if (rs.next()) {
+	            	event = new Event();
+                    event.setEvent_id(rs.getString("event_id"));
+                    event.setEvent_date(rs.getString("event_date"));
+                    event.setEvent_name(rs.getString("event_name"));
+                    event.setEvent_location(rs.getString("event_location"));
+                    event.setEvent_description(rs.getString("event_description"));
+                    event.setOrganizer_id("organizer_id");
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return event;
+    }
 }
