@@ -44,6 +44,7 @@ public class LoginPage {
         passwordField.setPromptText("Password");
 
         Label messageLabel = new Label();
+        messageLabel.setStyle("-fx-text-fill: red");
         
         HBox buttonsContainer = new HBox(10);
 
@@ -67,6 +68,7 @@ public class LoginPage {
             //TODO: To be Removed success message
             messageLabel.setText("Match!");
         });
+        loginButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
         
         Button registerButton = new Button("Register");
         registerButton.setOnAction(event -> {

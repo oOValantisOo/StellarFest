@@ -16,7 +16,21 @@ public class UserController {
     }
     
     public String generateID() {
-    	return "";
+        String prefix = "US";
+        int nextNum = 1; 
+
+        String query = "SELECT COUNT(*) AS user_count FROM users";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                nextNum = rs.getInt("user_count") + 1; 
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return String.format("%s%03d", prefix, nextNum);
     }
     
     public String validateRegister(String name, String password, String email, String role) {
@@ -28,17 +42,27 @@ public class UserController {
     		return "Password length must be at least 5 letters!";
     	}
     	
+    	if (getUserByEmail(email) != null) {
+    		return "Email must be unique!";
+    	}
+    	
+    	if (getUserByName(name) != null) {
+    		return "Username must be unique!";
+    	}
+    	
     	// TODO: Implement Unique Validation
     	return "";
     }
 	
     public void register(String name, String password, String email, String role) {
-        String query = "INSERT INTO users (user_name, user_password, user_email, user_role) VALUES(?, ?, ?, ?)";
+    	String currID = generateID();
+        String query = "INSERT INTO users (user_id, user_name, user_password, user_email, user_role) VALUES(?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setString(1, name);     
-            stmt.setString(2, password);   
-            stmt.setString(3, email);      
-            stmt.setString(4, role);       
+        	stmt.setString(1, currID);  
+            stmt.setString(2, name);     
+            stmt.setString(3, password);   
+            stmt.setString(4, email);      
+            stmt.setString(5, role);       
 
             int rowsAffected = stmt.executeUpdate();
             if (rowsAffected > 0) {
@@ -145,7 +169,7 @@ public class UserController {
 
 	
 	public User getUserByEmail(String email) {
-		String query = "SELECT * FROM users WHERE user_name = ?";
+		String query = "SELECT * FROM users WHERE user_email = ?";
 	    User user = getUserByName(email);
 
 	    try (PreparedStatement stmt = connection.prepareStatement(query)) {

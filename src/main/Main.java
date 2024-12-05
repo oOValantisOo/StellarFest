@@ -16,6 +16,9 @@ public class Main extends Application{
 		// TODO Auto-generated method stub
 		PageManager.initialize(primaryStage);
 		PageManager.getInstance().showLoginPage();
+		
+		primaryStage.setWidth(800);
+		primaryStage.setHeight(600);
 		primaryStage.show();
 	}
 

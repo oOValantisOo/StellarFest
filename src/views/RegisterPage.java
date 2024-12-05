@@ -53,6 +53,7 @@ public class RegisterPage {
 
 
         Label messageLabel = new Label();
+        messageLabel.setStyle("-fx-text-fill: red");
         
         HBox buttonsContainer = new HBox(10);
 
@@ -76,6 +77,7 @@ public class RegisterPage {
             messageLabel.setText("Success!");
             
         });
+        regisButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
         
         Button loginButton = new Button("Login");
         loginButton.setOnAction(event -> {
