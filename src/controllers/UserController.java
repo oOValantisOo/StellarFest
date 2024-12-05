@@ -12,11 +12,28 @@ public class UserController {
 	private Connection connection;
 
     public UserController() {
-        this.connection = (Connection) DatabaseConnection.getInstance(); 
+        this.connection = DatabaseConnection.getInstance().getConnection(); 
+    }
+    
+    public String generateID() {
+    	return "";
+    }
+    
+    public String validateRegister(String name, String password, String email, String role) {
+    	if (name.isEmpty() || password.isEmpty() || email.isEmpty() || role.isEmpty() ) {
+    		return "All field must be filled!";
+    	}
+    	
+    	if (password.length() < 5) {
+    		return "Password length must be at least 5 letters!";
+    	}
+    	
+    	// TODO: Implement Unique Validation
+    	return "";
     }
 	
     public void register(String name, String password, String email, String role) {
-        String query = "INSERT INTO user (user_name, user_password, user_email, user_role) VALUES(?, ?, ?, ?)";
+        String query = "INSERT INTO users (user_name, user_password, user_email, user_role) VALUES(?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, name);     
             stmt.setString(2, password);   
@@ -33,10 +50,18 @@ public class UserController {
             e.printStackTrace();
         }
     }
+    
+    public boolean validateLogin(String name, String password) {
+    	if (name.isEmpty() || password.isEmpty()) {
+    		return false;
+    	}
+    	
+    	return true;
+    }
 
 	
 	public User login(String name, String password) {
-		String query = "SELECT * FROM user WHERE name = ? AND password = ?";
+		String query = "SELECT * FROM users WHERE user_email = ? AND user_password = ?";
 		User user = null;
 		
 		try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -96,7 +121,7 @@ public class UserController {
 
 	
 	public User getUserByName(String name) {
-	    String query = "SELECT * FROM user WHERE name = ?";
+	    String query = "SELECT * FROM users WHERE user_name = ?";
 	    User user = null;
 
 	    try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -120,7 +145,7 @@ public class UserController {
 
 	
 	public User getUserByEmail(String email) {
-		String query = "SELECT * FROM user WHERE name = ?";
+		String query = "SELECT * FROM users WHERE user_name = ?";
 	    User user = getUserByName(email);
 
 	    try (PreparedStatement stmt = connection.prepareStatement(query)) {
