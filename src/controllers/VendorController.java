@@ -9,18 +9,18 @@ import java.util.List;
 
 import database.DatabaseConnection;
 import models.Event;
-import models.User;
+import models.Invitation;
 
 public class VendorController {
 	private Connection connection;
 
     public VendorController() {
-        this.connection = (Connection) DatabaseConnection.getInstance(); 
+    	this.connection = DatabaseConnection.getInstance().getConnection(); 
     }
     
     public String acceptInvitation(String email, String eventId) {
 		
-		String query = "UPDATE invitaton SET invitation_status = ? WHERE user_email = ? AND event_id = ?";
+		String query = "UPDATE invitatons SET invitation_status = ? WHERE user_email = ? AND event_id = ?";
 		
 		 try (PreparedStatement stmt = connection.prepareStatement(query)) {
 			stmt.setString(1, "accepted"); 
@@ -38,10 +38,35 @@ public class VendorController {
 	    }
     }
     
+    public List<Invitation> viewInvitations(String user_id){
+    	List<Invitation> invitations = new ArrayList<>();
+    	
+    	String query = "SELECT * FROM invitations WHERE user_id = ? AND invitation_status = ?";
+    	
+    	 try (PreparedStatement stmt = connection.prepareStatement(query)) {
+ 	    	stmt.setString(1, user_id);
+ 	    	stmt.setString(2, "pending");
+  	        try (ResultSet rs = stmt.executeQuery()) {
+  	            while(rs.next()) {
+  	                Invitation invitation = new Invitation();
+  	                invitation.setEvent_id(rs.getString("event_id"));
+  	                invitation.setInvitation_id(rs.getString("invitation_id"));
+  	                invitation.setInvitation_role(rs.getString("invitation_role"));
+  	                invitation.setInvitation_status(rs.getString("invitation_status"));
+  	                invitation.setUser_id(rs.getString("user_id"));
+  	                invitations.add(invitation);
+  	            }
+  	        }
+  	    } catch (SQLException e) {
+  	        e.printStackTrace();
+  	    }
+ 	    return invitations;
+    }
+    
     public List<Event> viewAcceptedEvents(String email, String user_id) {
         
-        String queryInvitation = "SELECT event_id FROM invitation WHERE user_id = ? AND invitation_status = ?";
-        String queryEvent = "SELECT * FROM event WHERE event_id = ?";
+        String queryInvitation = "SELECT event_id FROM invitations WHERE user_id = ? AND invitation_status = ?";
+        String queryEvent = "SELECT * FROM events WHERE event_id = ?";
         List<Event> events = new ArrayList<>();
         
         try (PreparedStatement stmtInvitation = connection.prepareStatement(queryInvitation)) {
@@ -77,15 +102,41 @@ public class VendorController {
     }
 
     
-    public void manageVendor(String description, String product) {
+    public String manageVendor(String description, String product) {
+    	String valid = checkManageVendorInput(description, product);
     	
+    	if(valid == "Success") {
+    		String query = "UPDATE vendors SET product_name = ?, product_description = ?";
+    		 try (PreparedStatement stmt = connection.prepareStatement(query)) {
+    		        stmt.setString(1, product);         
+    		        stmt.setString(2, description);         
+
+    		        int rowsAffected = stmt.executeUpdate();
+    		        if (rowsAffected > 0) {
+    		            return "Product successfully updated";
+    		        } else {
+    		            return "Failed to update account";
+    		        }
+    		    } catch (SQLException e) {
+    		        e.printStackTrace();
+    		        return "An error occurred while updating the profile";
+    		    }
+    	} else {
+    		return valid;
+    	}
     }
     
-    public boolean checkManageVendorInput(String description, String product) {
-    	return true;
+    public String checkManageVendorInput(String description, String product) {
+    	if(description == "" || product == "") {
+    		return "All fields must be filled!";
+    	}
+    	if(description.length() > 200) {
+    		return "Description length at max is 200 characters long!";
+    	}
+    	return "Success";
     }
     
-    public Event viewEventDetails(String eventId) {
+    public Event viewAcceptedEventDetails(String eventId) {
     	String query = "SELECT FROM event WHERE event_id = ?";
     	
     	Event event = null;

@@ -12,11 +12,11 @@ public class EventController {
 	private Connection connection;
 
     public EventController() {
-        this.connection = (Connection) DatabaseConnection.getInstance(); 
+    	this.connection = DatabaseConnection.getInstance().getConnection(); 
     }
 	
 	public void createEvent(String eventName, String date, String location, String description, String organizerId) {
-   	 String query = "INSERT INTO event (event_name, event_date, event_location, event_description, organizer_id) VALUES(?, ?, ?, ?, ?)";
+   	 String query = "INSERT INTO events (event_name, event_date, event_location, event_description, organizer_id) VALUES(?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, eventName);     
             stmt.setString(2, date);   
@@ -36,7 +36,7 @@ public class EventController {
    }
    
    public Event getEventDetails(String eventID) {
-   	String query = "SELECT * FROM event WHERE event_id = ?";
+   	String query = "SELECT * FROM events WHERE event_id = ?";
 	    Event event = null;
 
 	    try (PreparedStatement stmt = connection.prepareStatement(query)) {

@@ -17,11 +17,11 @@ public class EventOrganizerController {
 	private Connection connection;
 
     public EventOrganizerController() {
-        this.connection = (Connection) DatabaseConnection.getInstance(); 
+    	this.connection = DatabaseConnection.getInstance().getConnection(); 
     }
     
     public void createEvent(String eventName, String date, String location, String description, String organizerId) {
-    	 String query = "INSERT INTO event (event_name, event_date, event_location, event_description, organizer_id) VALUES(?, ?, ?, ?, ?)";
+    	 String query = "INSERT INTO events (event_name, event_date, event_location, event_description, organizer_id) VALUES(?, ?, ?, ?, ?)";
          try (PreparedStatement stmt = connection.prepareStatement(query)) {
              stmt.setString(1, eventName);     
              stmt.setString(2, date);   
@@ -40,8 +40,8 @@ public class EventOrganizerController {
          }
     }
     
-    public Event getEventDetails(String eventID) {
-    	String query = "SELECT * FROM event WHERE event_id = ?";
+    public Event viewOrganizedEventDetails(String eventID) {
+    	String query = "SELECT * FROM events WHERE event_id = ?";
  	    Event event = null;
 
  	    try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -65,7 +65,7 @@ public class EventOrganizerController {
     
     public List<Guest> getGuests() throws SQLException {
         List<Guest> guests = new ArrayList<>();
-        String query = "SELECT * FROM guest";
+        String query = "SELECT * FROM guests";
         
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
  	        try (ResultSet rs = stmt.executeQuery()) {
@@ -87,7 +87,7 @@ public class EventOrganizerController {
     
     public List<Vendor> getVendors() throws SQLException{
     	List<Vendor> vendors = new ArrayList<>();
-    	String query = "SELECT * FROM vendor";
+    	String query = "SELECT * FROM vendors";
     	
     	try (PreparedStatement stmt = connection.prepareStatement(query)) {
     		
@@ -108,13 +108,12 @@ public class EventOrganizerController {
         return vendors;
     }
     
-    public List<Event> viewOrganizedEvents(){
-    	String user_id = "x";
-    	String query = "SELECT * FROM event WHERE organizer_id = ?";
+    public List<Event> viewOrganizedEvents(String organizer_id){
+    	String query = "SELECT * FROM events WHERE organizer_id = ?";
     	List<Event> organizedEvents = new ArrayList<>();
     	
     	try (PreparedStatement stmt = connection.prepareStatement(query)) {
-    		stmt.setString(1, user_id);
+    		stmt.setString(1, organizer_id);
  	        try (ResultSet rs = stmt.executeQuery()) {
  	            while(rs.next()) {
  	                Event event = new Event();
@@ -123,7 +122,7 @@ public class EventOrganizerController {
  	                event.setEvent_id(rs.getString("event_id"));
  	                event.setEvent_location(rs.getString("event_location"));
  	                event.setEvent_name(rs.getString("event_name"));
- 	                event.setOrganizer_id(user_id);
+ 	                event.setOrganizer_id(organizer_id);
  	            }
  	        }
  	    } catch (SQLException e) {
@@ -133,18 +132,19 @@ public class EventOrganizerController {
     }
     
     public String editEventName(String eventId, String event_name) {
-    	String query = "UPDATE event SET event_name = ?";
+    	String query = "UPDATE events SET event_name = ? WHERE event_id = ?";
     	try (PreparedStatement stmt = connection.prepareStatement(query)) {
     		stmt.setString(1, event_name);
+    		stmt.setString(2, eventId);
     		int rowsAffected = stmt.executeUpdate();
 	        if (rowsAffected > 0) {
-	            return "Account successfully updated";
+	            return "Event successfully updated";
 	        } else {
-	            return "Failed to update account";
+	            return "Failed to update event";
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
-	        return "An error occurred while updating the profile";
+	        return "An error occurred while updating the event";
 	    }
     }
 }

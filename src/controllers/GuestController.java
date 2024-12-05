@@ -20,13 +20,39 @@ public class GuestController {
     }
 
     public GuestController() {
-        this.connection = (Connection) DatabaseConnection.getInstance(); 
+    	this.connection = DatabaseConnection.getInstance().getConnection(); 
+    }
+    
+    public List<Invitation> viewInvitations(){
+    	String user_id = this.userId;
+    	List<Invitation> invitations = new ArrayList<>();
+    	
+    	String query = "SELECT * FROM invitations WHERE user_id = ? AND invitation_status = ?";
+    	
+    	 try (PreparedStatement stmt = connection.prepareStatement(query)) {
+ 	    	stmt.setString(1, user_id);
+ 	    	stmt.setString(2, "pending");
+  	        try (ResultSet rs = stmt.executeQuery()) {
+  	            while(rs.next()) {
+  	                Invitation invitation = new Invitation();
+  	                invitation.setEvent_id(rs.getString("event_id"));
+  	                invitation.setInvitation_id(rs.getString("invitation_id"));
+  	                invitation.setInvitation_role(rs.getString("invitation_role"));
+  	                invitation.setInvitation_status(rs.getString("invitation_status"));
+  	                invitation.setUser_id(rs.getString("user_id"));
+  	                invitations.add(invitation);
+  	            }
+  	        }
+  	    } catch (SQLException e) {
+  	        e.printStackTrace();
+  	    }
+ 	    return invitations;
     }
     
     public String acceptInvitation(String eventId) {
 		String user_id = this.userId;
 		
-		String query = "UPDATE invitaton SET invitation_status = ? WHERE user_id = ? AND event_id = ?";
+		String query = "UPDATE invitatons SET invitation_status = ? WHERE user_id = ? AND event_id = ?";
 		
 		 try (PreparedStatement stmt = connection.prepareStatement(query)) {
 			stmt.setString(1, "accepted"); 
@@ -47,8 +73,8 @@ public class GuestController {
     public List<Event> viewAcceptedEvents(String email) {
         String user_id = this.userId; 
         
-        String queryInvitation = "SELECT event_id FROM invitation WHERE user_id = ? AND invitation_status = ?";
-        String queryEvent = "SELECT * FROM event WHERE event_id = ?";
+        String queryInvitation = "SELECT event_id FROM invitations WHERE user_id = ? AND invitation_status = ?";
+        String queryEvent = "SELECT * FROM events WHERE event_id = ?";
         List<Event> events = new ArrayList<>();
         
         try (PreparedStatement stmtInvitation = connection.prepareStatement(queryInvitation)) {
@@ -84,7 +110,7 @@ public class GuestController {
     }
     
     public Event viewEventDetails(String eventId) {
-    	String query = "SELECT FROM event WHERE event_id = ?";
+    	String query = "SELECT FROM events WHERE event_id = ?";
     	
     	Event event = null;
 

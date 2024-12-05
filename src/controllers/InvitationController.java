@@ -23,7 +23,7 @@ public class InvitationController {
 	private Connection connection;
 
     public InvitationController() {
-        this.connection = (Connection) DatabaseConnection.getInstance(); 
+    	this.connection = DatabaseConnection.getInstance().getConnection(); 
     }
 	
 	public String sendInvitation(String email) {
@@ -34,7 +34,7 @@ public class InvitationController {
 	public String acceptInvitation(String eventId) {
 		String user_id = this.userId;
 		
-		String query = "UPDATE invitaton SET invitation_status = ? WHERE user_id = ? AND event_id = ?";
+		String query = "UPDATE invitatons SET invitation_status = ? WHERE user_id = ? AND event_id = ?";
 		
 		 try (PreparedStatement stmt = connection.prepareStatement(query)) {
 			stmt.setString(1, "accepted"); 
@@ -78,7 +78,7 @@ public class InvitationController {
 		
 		String user_id = this.userId;
 	    
-	    String query = "SELECT * FROM invitation WHERE user_id = ?";
+	    String query = "SELECT * FROM invitations WHERE user_id = ?";
 	    List<Invitation> invitations = new ArrayList<>();
 	    
 	    try (PreparedStatement stmt = connection.prepareStatement(query)) {
