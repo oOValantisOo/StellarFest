@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import database.DatabaseConnection;
 import models.User;
@@ -31,6 +33,33 @@ public class UserController {
         }
 
         return String.format("%s%03d", prefix, nextNum);
+    }
+    
+    public List<User> getAllUser() {
+        String query = "SELECT * FROM users";
+        List<User> users = new ArrayList<>();
+        
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+
+	        try (ResultSet rs = stmt.executeQuery()) {
+	            while (rs.next()) {
+	            	User user = new User();
+	            	user.setUser_id(rs.getString("user_id"));
+	                user.setUser_name(rs.getString("user_name"));
+	                user.setUser_email(rs.getString("user_email"));
+	                user.setUser_role(rs.getString("user_role"));
+	                user.setUser_password(rs.getString("user_password"));
+	                
+	                users.add(user);
+	            }
+	        }
+	        
+	       
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return users;
     }
     
     public String validateRegister(String name, String password, String email, String role) {

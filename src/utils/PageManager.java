@@ -4,6 +4,7 @@ import controllers.UserController;
 import javafx.stage.Stage;
 import views.LoginPage;
 import views.RegisterPage;
+import views.ViewUsers;
 
 public class PageManager {
 	private static PageManager instance;
@@ -37,6 +38,10 @@ public class PageManager {
     	stage.setScene(regisPage.getScene());
     }
     
-	
+    public void showViewUsers() {
+    	UserController uc = new UserController();
+    	ViewUsers viewUserPage = new ViewUsers(uc);
+    	stage.setScene(viewUserPage.getScene());
+    }
 	
 }
