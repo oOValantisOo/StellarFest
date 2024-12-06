@@ -5,25 +5,30 @@ import java.util.List;
 import controllers.UserController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import javafx.util.Callback;
 import models.User;
 
 public class ViewUsers {
 	private UserController controller;
+    List<User> users;
+    
+    Label userCount;
 
 	public ViewUsers(UserController controller) {
 		super();
@@ -32,8 +37,8 @@ public class ViewUsers {
 	
 	@SuppressWarnings("unchecked")
 	public Scene getScene() {
-        // Mapping
-        List<User> users = controller.getAllUser();
+		// Mapping
+        users = controller.getAllUser();
         
         // Main Container
 		VBox container = new VBox(12);
@@ -50,7 +55,7 @@ public class ViewUsers {
 		header.setFont(Font.font("Arial", FontWeight.BOLD, 32));
 		
 		// Dynamic User Count
-		Label userCount =  new Label(users.size() + " members");
+		userCount =  new Label(users.size() + " members");
 		userCount.setFont(Font.font("Arial", FontPosture.ITALIC, 18));
 		
 		//  Header HBox
@@ -70,8 +75,11 @@ public class ViewUsers {
         emailCol.setCellValueFactory(new PropertyValueFactory<>("user_email"));
         roleCol.setCellValueFactory(new PropertyValueFactory<>("user_role"));
         
+        // Adding the column to TableView
         table.getColumns().addAll(userNameCol, emailCol, roleCol);
+        addActionButtons(table);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        
         ObservableList<User> userObservableList = FXCollections.observableArrayList(users);
         
         table.setItems(userObservableList);
@@ -84,4 +92,52 @@ public class ViewUsers {
 		
 		return new Scene(bp,1600,900);
 	}
+	
+	private void addActionButtons(TableView<User> table) {
+	    Callback<TableColumn<User, Void>, TableCell<User, Void>> cellFactory = new Callback<TableColumn<User, Void>, TableCell<User, Void>>() {
+	        @Override
+	        public TableCell<User, Void> call(TableColumn<User, Void> param) {
+	            return new TableCell<User, Void>() {
+	                private final Button deleteButton = new Button("Delete");
+
+	                {
+	                    // Set the action for the delete button
+	                    deleteButton.setOnAction((ActionEvent event) -> {
+	                        // Get the current row's user object
+	                        User user = getTableRow().getItem();
+	                        int index = getIndex();
+	                        if (user != null) {
+	                            controller.deleteUser(user.getUser_id());
+	                            
+	                            table.getItems().remove(index);
+	                        
+	                            updateUserCounter();
+	                        }
+	                    });
+	                }
+
+	                @Override
+	                protected void updateItem(Void item, boolean empty) {
+	                    super.updateItem(item, empty);
+	                    if (empty) {
+	                        setGraphic(null);
+	                    } else {
+	                        setGraphic(deleteButton);
+	                    }
+	                }
+	            };
+	        }
+	    };
+
+	    TableColumn<User, Void> actionCol = new TableColumn<>("Actions");
+	    actionCol.setCellFactory(cellFactory);
+
+	    table.getColumns().add(actionCol);
+	}
+	
+	private void updateUserCounter() {
+        users = controller.getAllUser();
+        userCount.setText(users.size() + " members");
+    }
+
 }

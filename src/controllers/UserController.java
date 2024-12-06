@@ -35,6 +35,22 @@ public class UserController {
         return String.format("%s%03d", prefix, nextNum);
     }
     
+    public void deleteUser(String id) {
+        String query = "DELETE FROM users WHERE user_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+        	stmt.setString(1, id);   
+
+            int rowsAffected = stmt.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("User deleted successfully!");
+            } else {
+                System.out.println("Failed to register user.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public List<User> getAllUser() {
         String query = "SELECT * FROM users";
         List<User> users = new ArrayList<>();
