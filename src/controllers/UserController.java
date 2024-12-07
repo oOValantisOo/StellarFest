@@ -199,7 +199,7 @@ public class UserController {
 	
 	public User getUserByEmail(String email) {
 		String query = "SELECT * FROM users WHERE user_email = ?";
-	    User user = getUserByName(email);
+		User user = null;
 
 	    try (PreparedStatement stmt = connection.prepareStatement(query)) {
 	        stmt.setString(1, email);

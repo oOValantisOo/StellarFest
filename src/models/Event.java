@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 public class Event {
 	private String event_id;
 	private String event_name;
@@ -7,6 +9,8 @@ public class Event {
 	private String event_location;
 	private String event_description;
 	private String organizer_id;
+	private List<Guest> guests;
+	private List<Vendor> vendors;
 	
 	public Event() {
 		
@@ -49,4 +53,21 @@ public class Event {
 		this.organizer_id = organizer_id;
 	}
 
+	public List<Guest> getGuests() {
+		return guests;
+	}
+
+	public void setGuests(List<Guest> guests) {
+		this.guests = guests;
+	}
+
+	public List<Vendor> getVendors() {
+		return vendors;
+	}
+
+	public void setVendors(List<Vendor> vendors) {
+		this.vendors = vendors;
+	}
+	
+	
 }
