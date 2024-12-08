@@ -1,9 +1,11 @@
 package utils;
 
+import controllers.EventController;
 import controllers.UserController;
 import javafx.stage.Stage;
 import views.LoginPage;
 import views.RegisterPage;
+import views.ViewEvents;
 import views.ViewUsers;
 
 public class PageManager {
@@ -42,6 +44,12 @@ public class PageManager {
     	UserController uc = new UserController();
     	ViewUsers viewUserPage = new ViewUsers(uc);
     	stage.setScene(viewUserPage.getScene());
+    }
+    
+    public void showViewEvents() {
+    	EventController ec = new EventController();
+    	ViewEvents viewEventsPage = new ViewEvents(ec);
+    	stage.setScene(null);
     }
 	
 }
