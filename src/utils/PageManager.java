@@ -49,7 +49,11 @@ public class PageManager {
     public void showViewEvents() {
     	EventController ec = new EventController();
     	ViewEvents viewEventsPage = new ViewEvents(ec);
-    	stage.setScene(null);
+    	stage.setScene(viewEventsPage.getScene());
+    }
+    
+    public void showEventDetail() {
+    	
     }
 	
 }
