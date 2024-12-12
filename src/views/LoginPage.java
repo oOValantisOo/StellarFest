@@ -15,6 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import models.User;
 import utils.PageManager;
+import utils.UserSession;
 
 public class LoginPage {
 	private UserController controller;
@@ -66,7 +67,9 @@ public class LoginPage {
             }
             
             //TODO: To be Removed success message
+            UserSession.authenticate(u);
             messageLabel.setText("Match!");
+            PageManager.getInstance().showViewOrganizedEvents();
         });
         loginButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
         

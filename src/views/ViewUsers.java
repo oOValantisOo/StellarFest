@@ -35,7 +35,6 @@ public class ViewUsers {
 		this.controller = controller;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public Scene getScene() {
 		// Mapping
         users = controller.getAllUser();
@@ -101,9 +100,8 @@ public class ViewUsers {
 	                private final Button deleteButton = new Button("Delete");
 
 	                {
-	                    // Set the action for the delete button
+	          
 	                    deleteButton.setOnAction((ActionEvent event) -> {
-	                        // Get the current row's user object
 	                        User user = getTableRow().getItem();
 	                        int index = getIndex();
 	                        if (user != null) {
