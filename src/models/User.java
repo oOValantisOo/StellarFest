@@ -18,8 +18,11 @@ public class User {
 	
 	private static Connection connection;
 	
-	public User() {
+	static {
 		connection = DatabaseConnection.getInstance().getConnection();
+	}
+	
+	public User() {
 	}
 	
 	public String getUser_id() {

@@ -17,11 +17,14 @@ public class Invitation {
 	private String invitation_role;
 
 	private static Connection connection;
+	
+	static {
+		connection = DatabaseConnection.getInstance().getConnection();
+	}
 
 	public Invitation() {
 		super();
 
-		connection = DatabaseConnection.getInstance().getConnection();
 	}
 
 	public String getInvitation_id() {

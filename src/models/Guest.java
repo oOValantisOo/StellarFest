@@ -13,9 +13,14 @@ public class Guest extends User{
 	
 	private static Connection connection;
 	
+	
+	static {
+		connection = DatabaseConnection.getInstance().getConnection();
+	}
+	
 	public Guest() {
 		super();
-		connection = DatabaseConnection.getInstance().getConnection();
+
 	}
 	
 	public static String addGuest(String event_id, String user_id) {
@@ -110,42 +115,7 @@ public class Guest extends User{
 	    }
 	}
     
-    public  static List<Event> viewAcceptedEvents(String email, String userId) {
-        String queryInvitation = "SELECT event_id FROM invitations WHERE user_id = ? AND invitation_status = ?";
-        String queryEvent = "SELECT * FROM events WHERE event_id = ?";
-        List<Event> events = new ArrayList<>();
-        
-        try (PreparedStatement stmtInvitation = connection.prepareStatement(queryInvitation)) {
-            stmtInvitation.setString(1, userId);
-            stmtInvitation.setString(2, "accepted");
-            
-            try (ResultSet rsInvitation = stmtInvitation.executeQuery()) {
-                while (rsInvitation.next()) {
-                    String event_id = rsInvitation.getString("event_id");
-                    
-                    try (PreparedStatement stmtEvent = connection.prepareStatement(queryEvent)) {
-                        stmtEvent.setString(1, event_id);
-                        
-                        try (ResultSet rsEvent = stmtEvent.executeQuery()) {
-                            if (rsEvent.next()) {
-                                Event event = new Event();
-                                event.setEvent_id(rsEvent.getString("event_id"));
-                                event.setEvent_date(rsEvent.getString("event_date"));
-                                event.setEvent_name(rsEvent.getString("event_name"));
-                                event.setEvent_location(rsEvent.getString("event_location"));
-                                event.setEvent_description(rsEvent.getString("event_description"));
-                                event.setOrganizer_id("organizer_id");
-                                events.add(event);
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return events;
-    }
+    
     
     public static Event viewEventDetails(String eventId) {
     	String query = "SELECT FROM events WHERE event_id = ?";

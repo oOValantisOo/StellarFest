@@ -19,9 +19,13 @@ public class Event {
 	private List<Vendor> vendors;
 	private List<Guest> guests;
 	private static Connection connection;
+	
+	static {
+		connection = DatabaseConnection.getInstance().getConnection();
+	}
 
 	public Event() {
-		connection = DatabaseConnection.getInstance().getConnection();
+	
 	}
 
 	public String getEvent_id() {

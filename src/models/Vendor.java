@@ -20,10 +20,14 @@ public class Vendor extends User {
 	public void setAccepted_invitations(String accepted_invitations) {
 		this.accepted_invitations = accepted_invitations;
 	}
+	
+	static {
+		connection = DatabaseConnection.getInstance().getConnection();
+	}
 
 	public Vendor() {
 		super();
-		connection = DatabaseConnection.getInstance().getConnection();
+
 	}
 
 	public static List<Vendor> getVendors() throws SQLException {
