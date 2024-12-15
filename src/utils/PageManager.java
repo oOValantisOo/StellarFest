@@ -1,10 +1,13 @@
-package utils;
+ package utils;
 
+import controllers.EventController;
 import controllers.EventOrganizerController;
 import controllers.UserController;
 import javafx.stage.Stage;
 import views.LoginPage;
 import views.RegisterPage;
+import views.ViewEventDetail;
+import views.ViewEvents;
 import views.ViewOrganizedEvents;
 import views.ViewUsers;
 
@@ -51,10 +54,16 @@ public class PageManager {
 		stage.setScene(view.getScene());
 	}
 
-//    public void showViewEvents() {
-//    	EventController ec = new EventController();
-//    	ViewEvents viewEventsPage = new ViewEvents(ec);
-//    	stage.setScene(viewEventsPage.getScene());
-//    }
+    public void showViewEvents() {
+    	EventController ec = new EventController();
+    	ViewEvents viewEventsPage = new ViewEvents(ec);
+    	stage.setScene(viewEventsPage.getScene());
+    }
+    
+    public void showEventDetail(String id) {
+    	EventOrganizerController eoc = new EventOrganizerController();
+    	ViewEventDetail viewEventDetail = new ViewEventDetail(eoc, id);
+    	stage.setScene(viewEventDetail.getScene());
+    }
 
 }

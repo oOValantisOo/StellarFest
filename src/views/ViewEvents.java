@@ -129,7 +129,7 @@ public class ViewEvents {
 	                    detailButton.setOnAction((ActionEvent event) -> {
 	                    	Event ev = getTableRow().getItem();
 	                    	if(ev != null) {
-//	                    		PageManager.getInstance().showEventDetail();
+	                    		PageManager.getInstance().showEventDetail(ev.getEvent_id());
 	                    	}
 	                    });
 	                }

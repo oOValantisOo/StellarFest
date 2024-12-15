@@ -15,7 +15,7 @@ public class Main extends Application{
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 		PageManager.initialize(primaryStage);
-		PageManager.getInstance().showLoginPage();
+		PageManager.getInstance().showViewEvents();
 		
 		primaryStage.setWidth(800);
 		primaryStage.setHeight(600);
