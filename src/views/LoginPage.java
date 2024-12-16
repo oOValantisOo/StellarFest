@@ -69,7 +69,9 @@ public class LoginPage {
             //TODO: To be Removed success message
             UserSession.authenticate(u);
             messageLabel.setText("Match!");
-            PageManager.getInstance().showViewOrganizedEvents();
+            
+            // Validasi by role
+            PageManager.getInstance().showHomePage("Admin");
         });
         loginButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
         

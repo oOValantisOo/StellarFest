@@ -4,6 +4,7 @@ import controllers.EventController;
 import controllers.EventOrganizerController;
 import controllers.UserController;
 import javafx.stage.Stage;
+import views.HomeAdmin;
 import views.LoginPage;
 import views.RegisterPage;
 import views.ViewEventDetail;
@@ -64,6 +65,14 @@ public class PageManager {
     	EventOrganizerController eoc = new EventOrganizerController();
     	ViewEventDetail viewEventDetail = new ViewEventDetail(eoc, id);
     	stage.setScene(viewEventDetail.getScene());
+    }
+    
+    public void showHomePage(String role) {
+    	if(role == "Admin") {
+    		
+    		HomeAdmin homeAdmin = new HomeAdmin();
+    		stage.setScene(homeAdmin.getScene());
+    	}
     }
 
 }
