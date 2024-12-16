@@ -42,6 +42,13 @@ public class ViewEvents {
 	public Scene getScene() {
 		// Mapping
 		events = controller.getAllEvent();
+		
+		// Back Button
+		Button back = new Button(" < ");
+		back.setPadding(new Insets(10));
+		back.setOnAction(action -> {
+			PageManager.getInstance().goBack();
+		});
         
         // Main Container
 		VBox container = new VBox(12);
@@ -98,6 +105,7 @@ public class ViewEvents {
 		// Pane
 		BorderPane bp = new BorderPane();
 		bp.setCenter(container);
+		bp.setTop(back);
 		
 		return new Scene(bp,1600,900);
 	}

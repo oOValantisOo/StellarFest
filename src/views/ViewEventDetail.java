@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import models.Event;
+import utils.PageManager;
 
 public class ViewEventDetail {
 	private EventOrganizerController controller;
@@ -31,8 +32,12 @@ public class ViewEventDetail {
 		container.setPrefWidth(800);
 		container.setPadding(new Insets(10,400,10,400));
 		
-		// Back button
+		// Back Button
 		Button back = new Button(" < ");
+		back.setPadding(new Insets(10));
+		back.setOnAction(action -> {
+			PageManager.getInstance().goBack();
+		});
 		
 		Label eventId = new Label("Event ID : " + event.getEvent_id());
 		

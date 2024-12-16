@@ -23,6 +23,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.util.Callback;
 import models.User;
+import utils.PageManager;
 
 public class ViewUsers {
 	private UserController controller;
@@ -48,6 +49,13 @@ public class ViewUsers {
 		// Subheader
 		Label subHeader = new Label("Manage users access");
 		subHeader.setFont(Font.font("Arial", FontWeight.NORMAL, 18));
+		
+		// Back Button
+		Button back = new Button(" < ");
+		back.setPadding(new Insets(10));
+		back.setOnAction(action -> {
+			PageManager.getInstance().goBack();
+		});
 		
 		// Header
 		Label header = new Label("Users");
@@ -88,6 +96,7 @@ public class ViewUsers {
 		// Pane
 		BorderPane bp = new BorderPane();
 		bp.setCenter(container);
+		bp.setTop(back);
 		
 		return new Scene(bp,1600,900);
 	}

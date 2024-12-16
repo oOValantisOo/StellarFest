@@ -1,10 +1,12 @@
 package views;
 
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -17,9 +19,8 @@ public class HomeAdmin {
 	public Scene getScene() {
 		VBox container = new VBox(20);
 		container.setAlignment(Pos.CENTER);
-		
-		Label welcomeLabel = new Label("Welcome, ");
-//		Label welcomeLabel = new Label("Welcome, " + UserSession.getInstance().getCurrUser().getUser_name() + "!");
+	
+		Label welcomeLabel = new Label("Welcome, " + UserSession.getInstance().getCurrUser().getUser_name() + "!");
 		welcomeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 32));
 		
 		Button manageUsersButton = new Button("Manage Users");
@@ -53,6 +54,6 @@ public class HomeAdmin {
         
         container.getChildren().addAll(welcomeLabel, gridContainer);
 		
-		return new Scene(container, 1600, 900);
+		return new Scene(container, 300, 200);
 	}
 }
