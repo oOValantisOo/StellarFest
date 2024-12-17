@@ -119,10 +119,10 @@ public class Invitation {
 
 	public static String acceptInvitation(String eventId, String userId) {
 
-		String query = "UPDATE invitatons SET invitation_status = ? WHERE user_id = ? AND event_id = ?";
+		String query = "UPDATE invitations SET invitation_status = ? WHERE user_id = ? AND event_id = ?";
 
 		try (PreparedStatement stmt = connection.prepareStatement(query)) {
-			stmt.setString(1, "accepted");
+			stmt.setString(1, "Accepted");
 			stmt.setString(2, userId);
 			stmt.setString(3, eventId);
 			int rowsAffected = stmt.executeUpdate();
@@ -137,7 +137,7 @@ public class Invitation {
 		}
 	}
 
-	public static List<Invitation> getInvitations(String userId) throws SQLException {
+	public static List<Invitation> getInvitations(String userId){
 
 		String query = "SELECT * FROM invitations WHERE user_id = ?";
 		List<Invitation> invitations = new ArrayList<>();

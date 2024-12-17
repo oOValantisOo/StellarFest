@@ -4,6 +4,7 @@ import java.util.Stack;
 
 import controllers.EventController;
 import controllers.EventOrganizerController;
+import controllers.InvitationController;
 import controllers.UserController;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -12,6 +13,7 @@ import views.LoginPage;
 import views.RegisterPage;
 import views.ViewEventDetail;
 import views.ViewEvents;
+import views.ViewInvitations;
 import views.ViewOrganizedEvents;
 import views.ViewUsers;
 
@@ -92,6 +94,12 @@ public class PageManager {
     		HomeAdmin homeAdmin = new HomeAdmin();
     		navigateTo(homeAdmin.getScene());
     	}
+    }
+    
+    public void showViewInvitations(String userId) {
+    	InvitationController ic = new InvitationController(userId);
+    	ViewInvitations viewInvitations = new ViewInvitations(ic);
+    	navigateTo(viewInvitations.getScene());
     }
 
 }
