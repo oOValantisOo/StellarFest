@@ -9,6 +9,7 @@ import controllers.ProductController;
 import controllers.UserController;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import models.Product;
 import views.HomeAdmin;
 import views.HomeVendor;
 import views.LoginPage;
@@ -19,6 +20,7 @@ import views.ViewEventDetail;
 import views.ViewEvents;
 import views.ViewInvitations;
 import views.ViewOrganizedEvents;
+import views.ViewProductDetail;
 import views.ViewUsers;
 
 public class PageManager {
@@ -122,5 +124,11 @@ public class PageManager {
     	ProductController pc = new ProductController();
     	ManageVendor viewManageVendor = new ManageVendor(pc, userId);
     	navigateTo(viewManageVendor.getScene());
+    }
+    
+    public void showViewProductDetail(Product product) {
+    	ProductController pc = new ProductController();
+    	ViewProductDetail viewProductDetail = new ViewProductDetail(pc, product);
+    	navigateTo(viewProductDetail.getScene());
     }
 }

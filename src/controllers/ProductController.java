@@ -27,7 +27,7 @@ public class ProductController {
 		return;
 	}
 	
-	public void updateVendor() {
-		
+	public String updateVendor(String name, String description, String product_id, String user_id) {
+		return Product.updateProfile(name, description, product_id, user_id);
 	}
 }

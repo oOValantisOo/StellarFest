@@ -145,5 +145,24 @@ public class Product {
 	}
 
 	// Update product
+	public static String updateProfile(String name, String description, String product_id, String user_id) {
+	    String query = "UPDATE products SET product_name = ?, product_description = ? WHERE product_id = ? AND user_id = ?";
+	    try (PreparedStatement stmt = connection.prepareStatement(query)) {
+	        stmt.setString(1, name);         
+	        stmt.setString(2, description);         
+	        stmt.setString(3, product_id);  
+	        stmt.setString(4, user_id); 
+
+	        int rowsAffected = stmt.executeUpdate();
+	        if (rowsAffected > 0) {
+	            return "Product successfully updated";
+	        } else {
+	            return "Failed to update account";
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        return "An error occurred while updating the profile";
+	    }
+	}
 	
 }

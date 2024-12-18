@@ -137,7 +137,7 @@ public class ManageVendor {
 	                    updateButton.setOnAction((ActionEvent event) -> {
 	                    	Product ev = getTableRow().getItem();
 	                    	if(ev != null) {
-	                    		controller.updateVendor();
+	                    		PageManager.getInstance().showViewProductDetail(ev);
 	                    		refreshTable();
 	                    	}
 	                    });
