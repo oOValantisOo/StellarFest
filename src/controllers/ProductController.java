@@ -16,4 +16,14 @@ public class ProductController {
 	public List<Product> getAllProduct(){
 		return Product.getAllProduct();
 	}
+
+	public void deleteProduct(String product_id){
+		Product.deleteProduct(product_id);
+		return;
+	}
+
+	public void manageVendor(String description, String name){
+		Product.manageVendor(description, name);
+		return;
+	}
 }

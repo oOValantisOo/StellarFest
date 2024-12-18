@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import database.DatabaseConnection;
+import utils.UserSession;
 
 public class Product {
 	
@@ -81,4 +82,49 @@ public class Product {
 
 		return products;
 	}
+
+	// Add product
+	public static void manageVendor(String description, String name){
+		String query = "INSERT INTO products VALUES( ?, ?, ?, ?)";
+		String user_id = UserSession.getInstance().getCurrUser().getUser_id();
+		String product_id = "PR004";
+
+		try (PreparedStatement stmt = connection.prepareStatement(query)) {
+			stmt.setString(1, product_id); // Generate new ID
+			stmt.setString(2, description);
+			stmt.setString(3, name);
+			stmt.setString(4, user_id);
+			
+			int rowsAffected = stmt.executeUpdate();
+			if(rowsAffected > 0){
+				return;
+			}else{
+				System.out.println("Failed to add product [!]");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// Delete product
+	public static void deleteProduct(String product_id){
+		String query = "DELETE FROM products WHERE product_id = ? ";
+
+		try (PreparedStatement stmt = connection.prepareStatement(query)) {
+			stmt.setString(1, product_id);
+			
+			int rowsAffected = stmt.executeUpdate();
+			if(rowsAffected > 0){
+				return;
+			}else{
+				System.out.println("Failed to remove product [!]");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	// Update product
 }
