@@ -228,7 +228,7 @@ public class Event {
 	                 + "FROM invitations i "
 	                 + "JOIN users u ON i.user_id = u.user_id "
 	                 + "JOIN events e ON i.event_id = e.event_id "
-	                 + "WHERE u.email = ? AND i.invitation_status = ?";
+	                 + "WHERE u.user_email = ? AND i.invitation_status = ?";
 
 	    List<Event> events = new ArrayList<>();
 

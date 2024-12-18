@@ -15,10 +15,10 @@ public class Main extends Application{
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 		PageManager.initialize(primaryStage);
-		PageManager.getInstance().showViewInvitations("US002");
+		PageManager.getInstance().showLoginPage();
 		
-		primaryStage.setWidth(800);
-		primaryStage.setHeight(600);
+		primaryStage.setWidth(1600);
+		primaryStage.setHeight(900);
 		primaryStage.show();
 	}
 

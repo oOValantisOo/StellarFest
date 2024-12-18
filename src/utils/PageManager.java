@@ -5,12 +5,16 @@ import java.util.Stack;
 import controllers.EventController;
 import controllers.EventOrganizerController;
 import controllers.InvitationController;
+import controllers.ProductController;
 import controllers.UserController;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import views.HomeAdmin;
+import views.HomeVendor;
 import views.LoginPage;
+import views.ManageVendor;
 import views.RegisterPage;
+import views.ViewAcceptedEvents;
 import views.ViewEventDetail;
 import views.ViewEvents;
 import views.ViewInvitations;
@@ -89,10 +93,16 @@ public class PageManager {
     }
     
     public void showHomePage(String role) {
-    	if(role == "Admin") {
-    		
+    	if(role.equals("Admin")) {
     		HomeAdmin homeAdmin = new HomeAdmin();
     		navigateTo(homeAdmin.getScene());
+    	}else if(role.equals("Guest")) {
+    		InvitationController ic = new InvitationController(UserSession.getInstance().getCurrUser().getUser_id());
+    		ViewInvitations viewInvitations = new ViewInvitations(ic);
+    		navigateTo(viewInvitations.getScene());
+    	}else if(role.equals("Vendor")) {
+    		HomeVendor homeVendor = new HomeVendor();
+    		navigateTo(homeVendor.getScene());
     	}
     }
     
@@ -102,4 +112,15 @@ public class PageManager {
     	navigateTo(viewInvitations.getScene());
     }
 
+    public void showViewAcceptedEvents(String userId) {
+    	EventController ec = new EventController();
+    	ViewAcceptedEvents viewAcceptedEvents = new ViewAcceptedEvents(ec);
+    	navigateTo(viewAcceptedEvents.getScene());
+    }
+    
+    public void showViewManageProduct(String userId) {
+    	ProductController pc = new ProductController();
+    	ManageVendor viewManageVendor = new ManageVendor(pc, userId);
+    	navigateTo(viewManageVendor.getScene());
+    }
 }

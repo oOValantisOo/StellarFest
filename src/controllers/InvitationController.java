@@ -33,8 +33,13 @@ public class InvitationController {
 	}
 	
 	public List<Invitation> getInvitations(String email){
-		return Invitation.getInvitations("US002");
-//		return Invitation.getInvitations(userId);
+		List<Invitation> lists = Invitation.getInvitations(userId);
+		lists.removeIf(inv -> "Accepted".equals(inv.getInvitation_status()));
+		return lists;
    }
+	
+	public List<Invitation> viewAcceptedEvents(String email){
+		return Invitation.viewAcceptedEvents(userId);
+	}
 }
 

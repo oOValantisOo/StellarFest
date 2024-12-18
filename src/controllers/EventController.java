@@ -33,4 +33,8 @@ public class EventController {
 	public void deleteEvent(String id) {
        Event.deleteEvent(id);
 	}
+	
+	public List<Event> viewAcceptedEvents(String email){
+		return Event.viewAcceptedEvents(email);
+	}
 }

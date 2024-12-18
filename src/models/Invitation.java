@@ -160,5 +160,31 @@ public class Invitation {
 		}
 		return invitations;
 	}
+	
+	public static List<Invitation> viewAcceptedEvents(String userId){
+
+		String query = "SELECT * FROM invitations WHERE user_id = ? AND invitation_status = ? ";
+		List<Invitation> invitations = new ArrayList<>();
+
+		try (PreparedStatement stmt = connection.prepareStatement(query)) {
+			stmt.setString(1, userId);
+			stmt.setString(2, "Accepted");
+			
+			try (ResultSet rs = stmt.executeQuery()) {
+				while (rs.next()) {
+					Invitation invitation = new Invitation();
+					invitation.setEvent_id(rs.getString("event_id"));
+					invitation.setInvitation_id(rs.getString("invitation_id"));
+					invitation.setInvitation_role(rs.getString("invitation_role"));
+					invitation.setInvitation_status(rs.getString("invitation_status"));
+					invitation.setUser_id(rs.getString("user_id"));
+					invitations.add(invitation);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return invitations;
+	}
 
 }

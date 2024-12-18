@@ -16,8 +16,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.util.Callback;
 import models.Event;
 import models.Invitation;
@@ -44,13 +47,23 @@ public class ViewInvitations {
 		});
 	
 		// Main container
-		VBox container = new VBox(0);
-		container.setAlignment(Pos.CENTER);
+		VBox container = new VBox(10);
+		container.setAlignment(Pos.CENTER_LEFT);
+		
+		BorderPane pane = new BorderPane();
 		
 		// Label
-//		Label userIdLabel = new Label("User ID : " + UserSession.getInstance().getCurrUser().getUser_id());
-		Label userIdLabel = new Label("User ID : ");
+		Label userIdLabel = new Label(UserSession.getInstance().getCurrUser().getUser_id() + " Pending Invitation's");
+		userIdLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
 		
+		// Button redirect to View
+		Button viewAcceptedInvitationsButton = new Button("See accepted invitations");
+		viewAcceptedInvitationsButton.setOnAction(action -> {
+			PageManager.getInstance().showViewAcceptedEvents(UserSession.getInstance().getCurrUser().getUser_id());
+		});
+	
+		pane.setLeft(userIdLabel);
+		pane.setRight(viewAcceptedInvitationsButton);
 		
 		// TableView
 		TableView<Invitation> table = new TableView<>();
@@ -78,7 +91,7 @@ public class ViewInvitations {
         ObservableList<Invitation> userObservableList = FXCollections.observableArrayList(invitations);
         table.setItems(userObservableList);
 		
-		container.getChildren().addAll(userIdLabel,table);
+		container.getChildren().addAll(pane,table);
 		
 		BorderPane bp = new BorderPane();
 		bp.setCenter(container);
@@ -109,7 +122,6 @@ public class ViewInvitations {
 	                            }
 	                        }
 	                    });
-	          
 	                }
 
 	                @Override
