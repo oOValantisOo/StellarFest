@@ -26,4 +26,8 @@ public class ProductController {
 		Product.manageVendor(description, name);
 		return;
 	}
+	
+	public void updateVendor() {
+		
+	}
 }

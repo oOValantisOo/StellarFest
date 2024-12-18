@@ -82,17 +82,35 @@ public class Product {
 
 		return products;
 	}
+	
+	public static String generateID() {
+        String prefix = "PR";
+        int nextNum = 1; 
+
+        String query = "SELECT COUNT(*) AS product_count FROM products";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                nextNum = rs.getInt("product_count") + 1; 
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return String.format("%s%03d", prefix, nextNum);
+    }
 
 	// Add product
-	public static void manageVendor(String description, String name){
+	public static void manageVendor(String name, String description){
 		String query = "INSERT INTO products VALUES( ?, ?, ?, ?)";
 		String user_id = UserSession.getInstance().getCurrUser().getUser_id();
-		String product_id = "PR004";
+		String product_id = generateID();
 
 		try (PreparedStatement stmt = connection.prepareStatement(query)) {
 			stmt.setString(1, product_id); // Generate new ID
-			stmt.setString(2, description);
-			stmt.setString(3, name);
+			stmt.setString(2, name);
+			stmt.setString(3, description);
 			stmt.setString(4, user_id);
 			
 			int rowsAffected = stmt.executeUpdate();
@@ -127,4 +145,5 @@ public class Product {
 	}
 
 	// Update product
+	
 }
