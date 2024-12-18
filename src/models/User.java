@@ -96,9 +96,6 @@ public class User {
 		}
 		return user;
 	}
-	
-	
-	
     
     public static String deleteEvent(String eventId) {
     	String query = "DELETE FROM events WHERE event_id = ?";
