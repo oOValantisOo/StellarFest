@@ -2,6 +2,8 @@
 
 import java.util.Stack;
 
+import java.sql.SQLException;
+
 import controllers.EventController;
 import controllers.EventOrganizerController;
 import controllers.InvitationController;
@@ -10,7 +12,12 @@ import controllers.UserController;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import models.Product;
+import views.AddGuest;
+import views.AddVendor;
+import views.CreateEvent;
+import views.EditEventName;
 import views.HomeAdmin;
+import views.HomeEventOrganizer;
 import views.HomeGuest;
 import views.HomeVendor;
 import views.LoginPage;
@@ -113,7 +120,30 @@ public class PageManager {
     	ViewInvitations viewInvitations = new ViewInvitations(ic);
     	navigateTo(viewInvitations.getScene());
     }
-
+    
+    public void showHomeEventOrganizer() {
+    	HomeEventOrganizer view = new HomeEventOrganizer();
+    	stage.setScene(view.getScene());
+    }
+    
+    public void showAddVendor(String eventID) throws SQLException {
+    	EventOrganizerController controller = new EventOrganizerController();
+    	AddVendor view = new AddVendor(controller, eventID);
+    	navigateTo(view.getScene());
+    }
+    
+    public void showAddGuest(String eventID) throws SQLException {
+    	EventOrganizerController controller = new EventOrganizerController();
+    	AddGuest view = new AddGuest(controller, eventID);
+    	navigateTo(view.getScene());
+    }
+    
+    public void showEditEventName(String eventID) throws SQLException {
+    	EventOrganizerController controller = new EventOrganizerController();
+    	EditEventName view = new EditEventName(controller, eventID);
+    	navigateTo(view.getScene());
+    }
+    
     public void showViewAcceptedEvents(String userId) {
     	EventController ec = new EventController();
     	ViewAcceptedEvents viewAcceptedEvents = new ViewAcceptedEvents(ec);
@@ -124,6 +154,12 @@ public class PageManager {
     	ProductController pc = new ProductController();
     	ManageVendor viewManageVendor = new ManageVendor(pc, userId);
     	navigateTo(viewManageVendor.getScene());
+    }
+    
+    public void showCreateEvent() throws SQLException {
+    	EventOrganizerController controller = new EventOrganizerController();
+    	CreateEvent view = new CreateEvent(controller);
+    	navigateTo(view.getScene());
     }
     
     public void showViewProductDetail(Product product) {

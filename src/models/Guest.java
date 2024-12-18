@@ -29,18 +29,22 @@ public class Guest extends User{
 		if (user == null) {
 			return "User does not exist";
 		}
-		String query = "INSERT INTO invitations (event_id, user_id, invitation_status, invitation_role) VALUES(?, ?, ?, ?)";
+		
+		String invitationId = Invitation.generateID();
+
+		String query = "INSERT INTO invitations (invitation_id, event_id, user_id, invitation_status, invitation_role) VALUES(?, ?, ?, ?, ?)";
 		try (PreparedStatement stmt = connection.prepareStatement(query)) {
-			stmt.setString(1, event_id);
-			stmt.setString(2, user_id);
-			stmt.setString(3, "pending");
-			stmt.setString(4, "Guest");
+			stmt.setString(1, invitationId);
+			stmt.setString(2, event_id);
+			stmt.setString(3, user_id);
+			stmt.setString(4, "pending");
+			stmt.setString(5, "Guest");
 
 			int rowsAffected = stmt.executeUpdate();
 			if (rowsAffected > 0) {
-				return "Vendor invitation sent successfully!";
+				return "Guest invitation sent successfully!";
 			} else {
-				return "Failed to send vendor invitation.";
+				return "Failed to send guest invitation.";
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -48,8 +52,8 @@ public class Guest extends User{
 		}
 	}
 	
-	public static List<Guest> getGuests() throws SQLException {
-        List<Guest> guests = new ArrayList<>();
+	public static List<User> getGuests() throws SQLException {
+        List<User> guests = new ArrayList<>();
         String query = "SELECT * FROM guests";
         
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
@@ -62,6 +66,8 @@ public class Guest extends User{
  	                guest.setUser_password(rs.getString("user_password"));
  	                guest.setUser_role("user_role");
  	                guests.add(guest);
+ 	                
+ 	                
  	            }
  	        }
  	    } catch (SQLException e) {
@@ -140,6 +146,66 @@ public class Guest extends User{
 	        e.printStackTrace();
 	    }
 	    return event;
-    } 
+    }
+    
+    public static List<User> getUninvitedGuests(String eventId) throws SQLException {
+		List<User> guests = new ArrayList<>();
+		String query = "SELECT * " + "FROM users u " + "WHERE u.user_role LIKE 'Guest' AND "
+				+ "      u.user_id NOT IN ( " + "          SELECT u.user_id " + "          FROM users u "
+				+ "          JOIN invitations i ON u.user_id = i.user_id "
+				+ "          JOIN events e ON e.event_id = i.event_id " + "          WHERE e.event_id LIKE ? "
+				+ "      )";
+
+		try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+			preparedStatement.setString(1, eventId);
+
+			try (ResultSet resultSet = preparedStatement.executeQuery()) {
+				while (resultSet.next()) {
+
+					User user = new User();
+					user.setUser_id(resultSet.getString("user_id"));
+					user.setUser_name(resultSet.getString("user_name"));
+					user.setUser_role(resultSet.getString("user_role"));
+					user.setUser_email(resultSet.getString("user_email"));
+
+					guests.add(user);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SQLException("An error occurred while fetching uninvited vendors.");
+		}
+
+		return guests;
+	}
+    
+    public static List<User> getGuestFromEvent(String eventId) throws SQLException {
+        List<User> guests = new ArrayList<>();
+        String query = "SELECT * " +
+                       "FROM users u " +
+                       "JOIN invitations i ON u.user_id = i.user_id " +
+                       "JOIN events e ON e.event_id = i.event_id " +
+                       "WHERE u.user_role LIKE 'Guest' AND e.event_id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, eventId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Guest guest = new Guest();
+                    guest.setUser_id(rs.getString("user_id"));
+                    guest.setUser_name(rs.getString("user_name"));
+                    guest.setUser_email(rs.getString("user_email"));
+                    guest.setUser_role(rs.getString("user_role"));
+                    guests.add(guest);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLException("An error occurred while fetching guests for the event.");
+        }
+
+        return guests;
+    }
 	
 }

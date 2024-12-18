@@ -1,5 +1,7 @@
-/utils/
-/views/
-/main/
 /controllers/
+/views/
+/utils/
 /models/
+/database/
+/main/
+/.DS_Store

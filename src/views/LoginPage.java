@@ -88,6 +88,6 @@ public class LoginPage {
         BorderPane bp = new BorderPane();
         bp.setCenter(container);
         
-        return new Scene(bp, 300, 200);
+        return new Scene(bp, 800, 600);
 	}
 }

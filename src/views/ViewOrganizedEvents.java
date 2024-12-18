@@ -10,10 +10,12 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -35,57 +37,62 @@ public class ViewOrganizedEvents {
 	
 	@SuppressWarnings("unchecked")
 	public Scene getScene() {
-		VBox container = new VBox();
-		container.setAlignment(Pos.CENTER);
-		container.setPadding(new Insets(50));
-		
-		VBox main = new VBox(10);
-		
-		Label pageLbl = new Label("View Organized Events");
-		pageLbl.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-		
-        TableView<Event> eventsTable = new TableView<>();
+	    Button back = new Button(" < ");
+	    back.setPadding(new Insets(10));
+	    back.setOnAction(action -> {
+	        PageManager.getInstance().goBack();
+	    });
 
-        ObservableList<Event> eventList = FXCollections.observableArrayList(events);
+	    BorderPane root = new BorderPane();
+	    root.setPadding(new Insets(10));
 
-        eventsTable.setItems(eventList);
+	    VBox backButtonContainer = new VBox();
+	    backButtonContainer.setPadding(new Insets(10));
+	    backButtonContainer.setAlignment(Pos.TOP_LEFT);
+	    backButtonContainer.getChildren().add(back);
+	    root.setLeft(backButtonContainer);
 
-        TableColumn<Event, String> idColumn = new TableColumn<>("Event ID");
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("event_id"));
+	    VBox main = new VBox(10);
+	    main.setAlignment(Pos.CENTER);
 
-        TableColumn<Event, String> nameColumn = new TableColumn<>("Event Name");
-        nameColumn.setCellValueFactory(new PropertyValueFactory<>("event_name"));
+	    Label pageLbl = new Label("View Organized Events");
+	    pageLbl.setFont(Font.font("Arial", FontWeight.BOLD, 24));
 
-        TableColumn<Event, String> dateColumn = new TableColumn<>("Event Date");
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("event_date"));
+	    TableView<Event> eventsTable = new TableView<>();
+	    ObservableList<Event> eventList = FXCollections.observableArrayList(events);
+	    eventsTable.setItems(eventList);
 
-        TableColumn<Event, String> locationColumn = new TableColumn<>("Event Location");
-        locationColumn.setCellValueFactory(new PropertyValueFactory<>("event_location"));
+	    TableColumn<Event, String> idColumn = new TableColumn<>("Event ID");
+	    idColumn.setCellValueFactory(new PropertyValueFactory<>("event_id"));
 
+	    TableColumn<Event, String> nameColumn = new TableColumn<>("Event Name");
+	    nameColumn.setCellValueFactory(new PropertyValueFactory<>("event_name"));
 
-        eventsTable.getColumns().addAll(idColumn, nameColumn, dateColumn, locationColumn);
+	    TableColumn<Event, String> dateColumn = new TableColumn<>("Event Date");
+	    dateColumn.setCellValueFactory(new PropertyValueFactory<>("event_date"));
 
-        eventsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        
-        eventsTable.setOnMouseClicked(event -> {                       
-            if (event.getClickCount() == 2) { 
-                Event e = eventsTable.getSelectionModel().getSelectedItem();
-                if (e != null) {
-                   String eventId = e.getEvent_id();
-                   
-                   // TODO: Add navigate to detail page
-                }
-            }
-        });
-        
-        Label pageGuide = new Label("Double-Click a row to view the full detail of an event!");
-        pageGuide.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-		
-		main.getChildren().addAll(pageLbl, eventsTable, pageGuide);
-		
-		container.getChildren().add(main);
-		
-		return new Scene(container, 400, 300);
-		
+	    TableColumn<Event, String> locationColumn = new TableColumn<>("Event Location");
+	    locationColumn.setCellValueFactory(new PropertyValueFactory<>("event_location"));
+
+	    eventsTable.getColumns().addAll(idColumn, nameColumn, dateColumn, locationColumn);
+	    eventsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+	    eventsTable.setOnMouseClicked(event -> {
+	        if (event.getClickCount() == 2) {
+	            Event e = eventsTable.getSelectionModel().getSelectedItem();
+	            if (e != null) {
+	                String eventId = e.getEvent_id();
+	                PageManager.getInstance().showEventDetail(eventId);
+	            }
+	        }
+	    });
+
+	    Label pageGuide = new Label("Double-Click a row to view the full detail of an event!");
+	    pageGuide.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+
+	    main.getChildren().addAll(pageLbl, eventsTable, pageGuide);
+	    root.setCenter(main);
+
+	    return new Scene(root, 800, 600);
 	}
 }

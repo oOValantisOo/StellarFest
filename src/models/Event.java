@@ -16,8 +16,8 @@ public class Event {
 	private String event_location;
 	private String event_description;
 	private String organizer_id;
-	private List<Vendor> vendors;
-	private List<Guest> guests;
+	private List<User> vendors;
+	private List<User> guests;
 	private static Connection connection;
 	
 	static {
@@ -25,7 +25,7 @@ public class Event {
 	}
 
 	public Event() {
-	
+		
 	}
 
 	public String getEvent_id() {
@@ -76,40 +76,63 @@ public class Event {
 		this.organizer_id = organizer_id;
 	}
 
-	public List<Guest> getGuests() {
+	public List<User> getGuests() {
 		return guests;
 	}
 
-	public void setGuests(List<Guest> guests) {
+	public void setGuests(List<User> guests) {
 		this.guests = guests;
 	}
 
-	public List<Vendor> getVendors() {
+	public List<User> getVendors() {
 		return vendors;
 	}
 
-	public void setVendors(List<Vendor> vendors) {
+	public void setVendors(List<User> vendors) {
 		this.vendors = vendors;
 	}
+	
+	public static String generateID() {
+		String prefix = "EV";
+		int nextNum = 1;
 
-	public static void createEvent(String eventName, String date, String location, String description,
-			String organizerId) {
-		String query = "INSERT INTO events (event_name, event_date, event_location, event_description, organizer_id) VALUES(?, ?, ?, ?, ?)";
+		String query = "SELECT COUNT(*) AS event_count FROM events";
+
 		try (PreparedStatement stmt = connection.prepareStatement(query)) {
-			stmt.setString(1, eventName);
-			stmt.setString(2, date);
-			stmt.setString(3, location);
-			stmt.setString(4, description);
-			stmt.setString(5, organizerId);
-
-			int rowsAffected = stmt.executeUpdate();
-			if (rowsAffected > 0) {
-				System.out.println("Event created successfully!");
-			} else {
-				System.out.println("Failed to create event.");
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				nextNum = rs.getInt("event_count") + 1;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+
+		return String.format("%s%03d", prefix, nextNum);
+	}
+
+	public static String createEvent(String eventName, String date, String location, String description,
+			String organizerId) {
+		
+		String eventId = generateID();
+		String query = "INSERT INTO events (event_id, event_name, event_date, event_location, event_description, organizer_id) VALUES(?, ?, ?, ?, ?, ?)";
+		try (PreparedStatement stmt = connection.prepareStatement(query)) {
+			stmt.setString(1, eventId);
+			stmt.setString(2, eventName);
+			stmt.setString(3, date);
+			stmt.setString(4, location);
+			stmt.setString(5, description);
+			stmt.setString(6, organizerId);
+
+			int rowsAffected = stmt.executeUpdate();
+			if (rowsAffected > 0) {
+				return "Event created successfully!";
+			} else {
+				return "Failed to create event.";
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+			return "Failed to create event.";
 		}
 	}
 
@@ -179,6 +202,10 @@ public class Event {
 					event.setEvent_description(rs.getString("event_description"));
 					event.setEvent_id(rs.getString("event_id"));
 					event.setOrganizer_id(rs.getString("organizer_id"));
+					
+					event.setVendors(Vendor.getVendorFromEvent(eventID));
+					
+					event.setGuests(Guest.getGuestFromEvent(eventID));
 				}
 			}
 		} catch (SQLException e) {

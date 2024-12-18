@@ -11,6 +11,7 @@ import database.DatabaseConnection;
 import models.Event;
 import models.Guest;
 import models.Invitation;
+import models.User;
 
 public class GuestController {
 	private String userId;

@@ -51,6 +51,6 @@ public class HomeVendor {
         
         container.getChildren().addAll(welcomeLabel, gridContainer);
 		
-		return new Scene(container, 300, 200);
+		return new Scene(container, 800, 600);
 	}
 }

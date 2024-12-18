@@ -110,7 +110,7 @@ public class ManageVendor {
 		bp.setTop(back); 
 		bp.setBottom(formContainer);
 		
-		return new Scene(bp, 300, 200);
+		return new Scene(bp, 800, 600);
 	}
 	
 	private void addActionButtons(TableView<Product> table) {
@@ -122,9 +122,8 @@ public class ManageVendor {
 	                private final Button updateButton = new Button("Update");
 
 	                {
-	                    // Set the action for the delete button
+	                
 	                    deleteButton.setOnAction((ActionEvent event) -> {
-	                        // Get the current row's user object
 	                    	Product ev = getTableRow().getItem();
 	                        int index = getIndex();
 	                        if (ev != null) {
@@ -133,7 +132,7 @@ public class ManageVendor {
 	                        }
 	                    });
 	                    
-	                    // Set action for detail button
+	                
 	                    updateButton.setOnAction((ActionEvent event) -> {
 	                    	Product ev = getTableRow().getItem();
 	                    	if(ev != null) {

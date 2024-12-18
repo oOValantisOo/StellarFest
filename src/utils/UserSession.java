@@ -1,5 +1,6 @@
 package utils;
 
+import controllers.UserController;
 import models.User;
 
 public class UserSession {
@@ -8,6 +9,7 @@ public class UserSession {
 	
 	private UserSession(User u) {
 		currUser = u;
+		
 	}
 	
 	public static UserSession getInstance() throws Error {
@@ -32,6 +34,7 @@ public class UserSession {
 	
 	public void logout() {
 		currUser = null;
+		PageManager.getInstance().showLoginPage();
 	}
 	
 	

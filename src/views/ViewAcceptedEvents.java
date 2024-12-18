@@ -36,29 +36,24 @@ public class ViewAcceptedEvents {
 	}
 	
 	public Scene getScene() {
-		// Mapping
 		events = controlller.viewAcceptedEvents(UserSession.getInstance().getCurrUser().getUser_email()); // Email nya dipake dalam query
 		
-		// Back Button
 		Button back = new Button(" < ");
 		back.setPadding(new Insets(10));
 		back.setOnAction(action -> {
 			PageManager.getInstance().goBack();
 		});
 	
-		// Main container
 		VBox container = new VBox(10);
 		container.setAlignment(Pos.CENTER_LEFT);
 		
 		BorderPane pane = new BorderPane();
 		
-		// Label
 		Label userIdLabel = new Label(UserSession.getInstance().getCurrUser().getUser_id() +  " Accepted Invitation's");
 		userIdLabel.setFont(Font.font("Arial", FontWeight.BOLD, 24));
 	
 		pane.setLeft(userIdLabel);
 		
-		// TableView
 		TableView<Event> table = new TableView<>();
 		table.setPrefWidth(800);
         table.setEditable(false);
@@ -70,15 +65,13 @@ public class ViewAcceptedEvents {
         TableColumn<Event, String> eventDescription = new TableColumn<>("event_description");
         TableColumn<Event, String> organizerId = new TableColumn<>("organizer_id");
         
-        // Binding Columns
         eventId.setCellValueFactory(new PropertyValueFactory<>("event_id"));
         eventName.setCellValueFactory(new PropertyValueFactory<>("event_name"));
         eventDate.setCellValueFactory(new PropertyValueFactory<>("event_date"));
         eventLocation.setCellValueFactory(new PropertyValueFactory<>("event_location"));
         eventDescription.setCellValueFactory(new PropertyValueFactory<>("event_description"));
         organizerId.setCellValueFactory(new PropertyValueFactory<>("organizer_id"));
-        
-        // Adding the columns to TableView
+       
         table.getColumns().addAll(eventId, eventName, eventDate, eventLocation, eventDescription,organizerId);
         addActionButtons(table);
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -92,7 +85,7 @@ public class ViewAcceptedEvents {
 		bp.setCenter(container);
 		bp.setTop(back);
 		
-		return new Scene(bp, 300, 200);
+		return new Scene(bp, 800, 600);
 	}
 	
 	private void addActionButtons(TableView<Event> table) {

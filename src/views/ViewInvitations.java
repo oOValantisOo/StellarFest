@@ -97,7 +97,7 @@ public class ViewInvitations {
 		bp.setCenter(container);
 		bp.setTop(back);
 		
-		return new Scene(bp, 300, 200);
+		return new Scene(bp, 800, 600);
 	}
 	
 	private void addActionButtons(TableView<Invitation> table) {
