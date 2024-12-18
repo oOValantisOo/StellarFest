@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import models.Product;
 import views.HomeAdmin;
+import views.HomeGuest;
 import views.HomeVendor;
 import views.LoginPage;
 import views.ManageVendor;
@@ -99,9 +100,8 @@ public class PageManager {
     		HomeAdmin homeAdmin = new HomeAdmin();
     		navigateTo(homeAdmin.getScene());
     	}else if(role.equals("Guest")) {
-    		InvitationController ic = new InvitationController(UserSession.getInstance().getCurrUser().getUser_id());
-    		ViewInvitations viewInvitations = new ViewInvitations(ic);
-    		navigateTo(viewInvitations.getScene());
+    		HomeGuest homeGuest = new HomeGuest();
+    		navigateTo(homeGuest.getScene());
     	}else if(role.equals("Vendor")) {
     		HomeVendor homeVendor = new HomeVendor();
     		navigateTo(homeVendor.getScene());
